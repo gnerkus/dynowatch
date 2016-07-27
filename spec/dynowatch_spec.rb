@@ -19,7 +19,7 @@ describe Dynowatch::Parser do
 
   describe 'get_route_name' do
     it 'should determine the matching route from a log line' do
-      expect(Dynowatch::Parser.get_route_name(valid_log)).to eq('pending_messages')
+      expect(Dynowatch::Parser.get_route_name(valid_log)).to eq('count_pending_messages')
     end
   end
 
@@ -36,8 +36,3 @@ describe Dynowatch::Parser do
   end
 
 end
-
-# Info required:
-# - url (including request type)
-# - response time
-# - dyno
