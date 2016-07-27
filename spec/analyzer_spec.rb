@@ -6,6 +6,7 @@ describe Dynowatch::Analyzer do
   let(:sample_array) { [1, 2, 3, 4, 5] }
 
   let(:mixed_array) { [1, 4, 5, 2, 3, 2, 3, 3, 3] }
+  let(:word_array) { ['a', 'z', 'e', 'z', 'b'] }
 
   describe 'mean' do
     it 'should obtain the mean of an array of numbers' do
@@ -22,6 +23,7 @@ describe Dynowatch::Analyzer do
   describe 'mode' do
     it 'should return the most frequent element of an array' do
       expect(Dynowatch::Analyzer.mode(mixed_array)).to eq(3)
+      expect(Dynowatch::Analyzer.mode(word_array)).to eq('z')
     end
   end
 end
