@@ -7,6 +7,19 @@ describe Dynowatch::Parser do
 
   let(:invalid_log) { 'x.x.x.90 - - [13/Sep/2006:07:01:51 -0700] "PROPFIND /svn/[xxxx]/[xxxx]/trunk HTTP/1.1" 401 587' }
 
+  let(:log_data) {
+    {
+      users: {
+        count_pending_messages: { count: 0, times: [], dynos: [] },
+        get_messages: { count: 0, times: [], dynos: [] },
+        get_friends_progress: { count: 0, times: [], dynos: [] },
+        get_friends_score: { count: 0, times: [], dynos: [] },
+        create_user: { count: 0, times: [], dynos: [] },
+        get_user: { count: 0, times: [], dynos: [] }
+      }
+    }
+  }
+
   describe 'is_valid_log' do
     it 'should return true for valid log string' do
       expect(Dynowatch::Parser.is_valid_log(valid_log)).to be true
@@ -32,6 +45,14 @@ describe Dynowatch::Parser do
   describe 'get_dyno' do
     it 'should fetch the responding dyno' do
       expect(Dynowatch::Parser.get_dyno(valid_log)).to eq('web.8')
+    end
+  end
+
+  describe 'parse_log' do
+    it 'should parse the log file correctly' do
+      Dynowatch::Parser.parse_log(log_data, valid_log)
+      expect(log_data[:users][:count_pending_messages][:count]).to eq(1)
+      expect(log_data[:users][:count_pending_messages][:times]).to eq([18])
     end
   end
 
