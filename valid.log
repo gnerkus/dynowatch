@@ -1,0 +1,6 @@
+2014-01-09T06:16:53.748849+00:00 heroku[router]: at=info method=POST path=/api/online/platforms/facebook_canvas/users/100002266342173/add_ticket host=services.pocketplaylab.com fwd="94.66.255.106" dyno=web.12 connect=12ms service=21ms status=200 bytes=78
+2014-01-09T06:16:53.742892+00:00 heroku[router]: at=info method=GET path=/api/users/100002266342173/count_pending_messages host=services.pocketplaylab.com fwd="94.66.255.106" dyno=web.8 connect=9ms service=9ms status=304 bytes=0
+2014-01-09T06:16:53.766841+00:00 heroku[router]: at=info method=POST path=/logs/save_personal_data host=services.pocketplaylab.com fwd="5.13.87.91" dyno=web.10 connect=1ms service=42ms status=200 bytes=16
+2014-01-09T06:16:53.772938+00:00 heroku[router]: at=info method=POST path=/api/users/100002844291023 host=services.pocketplaylab.com fwd="46.195.178.244" dyno=web.6 connect=2ms service=43ms status=200 bytes=52
+2014-01-09T06:16:53.765430+00:00 heroku[router]: at=info method=GET path=/api/users/100005936523817/get_friends_progress host=services.pocketplaylab.com fwd="5.13.87.91" dyno=web.11 connect=1ms service=47ms status=200 bytes=7498
+2014-01-09T06:16:53.760472+00:00 heroku[router]: at=info method=POST path=/api/users/1770684197 host=services.pocketplaylab.com fwd="74.139.217.81" dyno=web.5 connect=1ms service=17ms status=200 bytes=681
