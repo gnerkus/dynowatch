@@ -14,8 +14,6 @@ module Dynowatch
       }
     }
 
-    VALID_RESOURCE = 'users'
-
     # Regular expressions for testing routes
     VALID_LOG_LINE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{6}\+00:00\ heroku\[router\]\:/
     REQUEST_METHOD = /method\=([A-Z]+)/
@@ -88,7 +86,7 @@ module Dynowatch
     # Read information from a log file and update the log data
     def self.parse_log_file(log_file_path, valid_resource, log_file_info)
       # Resource path
-      resc = VALID_RESOURCE.to_sym
+      resc = valid_resource.to_sym
 
       # Read log file
       File.open(log_file_path, 'r') do |infile|
