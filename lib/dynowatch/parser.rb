@@ -1,5 +1,6 @@
 module Dynowatch
   class Parser
+    # A list of endpoints to be analyzed as specified by the problem statement
     ENDPOINTS = {
       users: {
         count_pending_messages: { 'GET': 'count_pending_messages' },
@@ -12,6 +13,8 @@ module Dynowatch
         }
       }
     }
+
+    VALID_RESOURCE = 'users'
 
     # Regular expressions for testing routes
     VALID_LOG_LINE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{6}\+00:00\ heroku\[router\]\:/
@@ -29,6 +32,7 @@ module Dynowatch
     def initialize
 
     end
+
     # A valid Heroku log has the form:
     # time hostname heroku[router]: <log-details>
     # Example:
@@ -38,17 +42,23 @@ module Dynowatch
       !!(log =~ VALID_LOG_LINE)
     end
 
-    def self.get_route_name(log)
+    # Check if the log file contains a request to a route listed in ENDPOINTS
+    def self.get_route_name(log, valid_resource)
       # Get the request method
-      method = log.match(REQUEST_METHOD)[1]
+      method = log.match(REQUEST_METHOD).to_a.dig(1)
       # Get API resource
-      resource = log.match(API_RESOURCE)[1]
+      resource = log.match(API_RESOURCE).to_a.dig(1)
       # Get API endpoint
-      endpoint = log.match(API_ENDPOINT)[1] || 'blank'
+      endpoint = log.match(API_ENDPOINT).to_a.dig(1) || 'blank'
 
-      ENDPOINTS[resource.to_sym][endpoint.to_sym][method.to_sym]
+      if method && resource == valid_resource && endpoint
+        ENDPOINTS[resource.to_sym][endpoint.to_sym][method.to_sym]
+      else
+        false
+      end
     end
 
+    # Obtain the response time for the request in the log
     def self.get_time(log)
       connect_time = log.match(CONNECT_TIME)[1].to_i
       service_time = log.match(SERVICE_TIME)[1].to_i
@@ -56,8 +66,47 @@ module Dynowatch
       connect_time + service_time
     end
 
+    # Get the responding dyno for the request in the log
     def self.get_dyno(log)
       log.match(DYNO)[1]
+    end
+
+    # Get route, response time and dyno details from a log line
+    def self.parse_log_line(log, valid_resource)
+      if is_valid_log(log)
+        route_name = get_route_name(log, valid_resource)
+        if route_name
+          {
+            route: route_name,
+            time: get_time(log),
+            dyno: get_dyno(log)
+          }
+        end
+      end
+    end
+
+    # Read information from a log file and update the log data
+    def self.parse_log_file(log_file_path, valid_resource, log_file_info)
+      # Resource path
+      resc = VALID_RESOURCE.to_sym
+
+      # Read log file
+      File.open(log_file_path, 'r') do |infile|
+        while line = infile.gets
+          log_info = parse_log_line(line, valid_resource)
+
+          if log_info
+            log_url = log_info[:route].to_sym
+
+            # Increment count for the file
+            log_file_info[resc][log_url][:count] += 1
+            log_file_info[resc][log_url][:times] << log_info[:time]
+            log_file_info[resc][log_url][:dynos] << log_info[:dyno]
+          end
+        end
+      end
+
+      log_file_info
     end
   end
 end

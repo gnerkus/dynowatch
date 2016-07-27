@@ -66,8 +66,9 @@ describe Dynowatch::Parser do
 
   describe 'parse_log_file' do
     it 'should parse the log file correctly' do
-      Dynowatch::Parser.parse_log_file(valid_log_file, log_data)
+      Dynowatch::Parser.parse_log_file(valid_log_file, valid_resource, log_data)
       expect(log_data[:users][:count_pending_messages][:count]).to eq(1)
+      expect(log_data[:users][:create_user][:count]).to eq(2)
     end
   end
 end
