@@ -49,7 +49,13 @@ module Dynowatch
       # Get API endpoint
       endpoint = log.match(API_ENDPOINT).to_a.dig(1) || 'blank'
 
-      if method && resource == valid_resource && endpoint
+      # Check if the log should be processed
+      # - Ensure a method exists
+      # - Ensure the resource in the route matches the ones to be analyzed. For
+      # example, the current resource to be analyzed is 'users' so the route
+      # must match /api/users
+      # - Ensure the endpoint is listed in the ENDPOINTS object
+      if method && (resource == valid_resource) && (ENDPOINTS[valid_resource.to_sym].keys().include? endpoint.to_sym)
         ENDPOINTS[resource.to_sym][endpoint.to_sym][method.to_sym]
       else
         false
