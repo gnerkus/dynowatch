@@ -23,7 +23,7 @@ Or install it yourself as:
 To perform analysis on a log file, execute
 
 ```bash
-bundle exec bin/dynowatch <log file>
+dynowatch <logfile>
 ```
 
 ## Development
@@ -34,7 +34,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/dynowatch.
+Bug reports and pull requests are welcome on GitHub at https://github.com/gnerkus/dynowatch.
 
 
 ## License
